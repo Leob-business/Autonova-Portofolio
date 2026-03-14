@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autonova — Agence Automatisation IA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&family=Syne+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07070f;
+      --surface: #0f0f1a;
+      --card: #111119;
+      --border: rgba(255,255,255,0.07);
+      --accent: #3ef0b0;
+      --accent-dim: rgba(62,240,176,0.08);
+      --accent2: #7c5cfc;
+      --text: #f0f0f5;
+      --muted: #6b6b82;
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'Outfit', sans-serif;
+      --font-mono: 'Syne Mono', monospace;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(62,240,176,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(62,240,176,0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+    /* ===== HEADER ===== */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(7,7,15,0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+
+    nav { display: flex; gap: 32px; align-items: center; }
+    nav a {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color .2s;
+      cursor: pointer;
+    }
+    nav a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--accent) !important;
+      color: #07070f !important;
+      padding: 9px 22px !important;
+      border-radius: 7px;
+      font-weight: 700 !important;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 130px 48px 90px;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -60%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(62,240,176,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(62,240,176,0.2);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 7px 18px;
+      border-radius: 100px;
+      margin-bottom: 36px;
+      letter-spacing: 0.04em;
+    }
+    .hero-badge-dot {
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(46px, 7vw, 90px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -2.5px;
+      margin-bottom: 26px;
+      max-width: 860px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 44px;
+      font-weight: 400;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #07070f;
+      padding: 14px 34px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      font-family: var(--font-body);
+      transition: transform .15s, box-shadow .2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 36px rgba(62,240,176,0.22);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      padding: 14px 34px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      font-family: var(--font-body);
+      transition: border-color .2s, background .2s;
+    }
+    .btn-ghost:hover {
+      border-color: rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.04);
+    }
+
+    /* ===== LAYOUT ===== */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 80px 48px;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.2px;
+      margin-bottom: 14px;
+    }
+
+    .section-sub {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 56px;
+    }
+
+    /* ===== DEMO GRID ===== */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .demo-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: border-color .25s;
+    }
+    .demo-card:hover { border-color: rgba(62,240,176,0.18); }
+
+    .demo-head {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .demo-icon {
+      width: 38px; height: 38px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(62,240,176,0.15);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .demo-title {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+
+    .demo-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    .demo-body { padding: 18px 22px; }
+
+    /* CHATBOT */
+    .chat-msgs {
+      height: 240px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+    .chat-msgs::-webkit-scrollbar { width: 3px; }
+    .chat-msgs::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); }
+
+    .msg {
+      max-width: 88%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      animation: slideIn .18s ease-out;
+    }
+    @keyframes slideIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+
+    .msg-user {
+      background: var(--accent2);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .msg-bot {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .msg-typing {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      align-self: flex-start;
+      border-radius: 14px;
+      border-bottom-left-radius: 4px;
+      padding: 12px 16px;
+    }
+    .dot-row span {
+      display: inline-block;
+      width: 5px; height: 5px;
+      background: var(--muted);
+      border-radius: 50%;
+      margin: 0 2px;
+      animation: bounce 1.2s infinite;
+    }
+    .dot-row span:nth-child(2) { animation-delay:.2s; }
+    .dot-row span:nth-child(3) { animation-delay:.4s; }
+    @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+    .chat-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-in {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 13px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .chat-in:focus { border-color: rgba(62,240,176,0.35); }
+    .chat-in::placeholder { color: var(--muted); }
+
+    .chat-go {
+      background: var(--accent);
+      color: #07070f;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: opacity .15s;
+    }
+    .chat-go:hover { opacity: 0.85; }
+    .chat-go:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* DM DEMO */
+    .dm-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 12px; }
+
+    .dm-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: border-color .2s, background .2s;
+    }
+    .dm-item.active {
+      border-color: rgba(62,240,176,0.35);
+      background: rgba(62,240,176,0.05);
+    }
+
+    .dm-av {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      font-family: var(--font-head);
+    }
+
+    .dm-info { flex: 1; min-width: 0; }
+    .dm-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .dm-msg { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .dm-dot {
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .dm-reply {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      min-height: 58px;
+      color: var(--muted);
+      line-height: 1.6;
+      transition: border-color .2s, color .2s;
+      margin-bottom: 10px;
+    }
+    .dm-reply.ready { color: var(--text); border-color: rgba(62,240,176,0.28); }
+
+    .dm-gen {
+      width: 100%;
+      background: var(--accent-dim);
+      border: 1px solid rgba(62,240,176,0.2);
+      color: var(--accent);
+      padding: 9px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: background .2s;
+    }
+    .dm-gen:hover { background: rgba(62,240,176,0.14); }
+    .dm-gen:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* ===== SECTORS ===== */
+    .sectors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .sector-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      transition: border-color .2s, transform .2s;
+    }
+    .sector-card:hover {
+      border-color: rgba(62,240,176,0.2);
+      transform: translateY(-3px);
+    }
+
+    .sector-emoji { font-size: 30px; margin-bottom: 16px; }
+
+    .sector-name {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 17px;
+      margin-bottom: 10px;
+    }
+
+    .sector-text { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+
+    .gains {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .gain {
+      font-size: 12px;
+      color: var(--accent);
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .gain::before { content: '→'; }
+
+    /* ===== STATS ===== */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 80px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: var(--font-head);
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -1px;
+      margin-bottom: 6px;
+    }
+
+    .stat-label { font-size: 14px; color: var(--muted); }
+
+    /* ===== CTA ===== */
+    .cta-block {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 80px 48px 120px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-block .section-label { text-align: center; }
+    .cta-block .section-title { margin: 0 auto 16px; }
+    .cta-block p { color: var(--muted); margin-bottom: 40px; font-size: 17px; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media(max-width: 820px) {
+      header { padding: 16px 20px; }
+      nav { gap: 18px; }
+      nav a:not(.nav-cta) { display: none; }
+      .wrapper { padding: 60px 20px; }
+      .hero { padding: 110px 20px 70px; }
+      .demo-grid { grid-template-columns: 1fr; }
+      .sectors-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr; }
+      .cta-block { padding: 60px 20px 80px; }
+      footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#">Auto<span>nova</span></a>
+  <nav>
+    <a onclick="scrollTo('demos')">Démos</a>
+    <a onclick="scrollTo('secteurs')">Secteurs</a>
+    <a onclick="scrollTo('contact')" class="nav-cta">Prendre contact</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    Autonova · Automatisation IA
+  </div>
+  <h1>Automatise ton business.<br><em>Multiplie tes résultats.</em></h1>
+  <p class="hero-sub">On installe des systèmes IA dans ton business — chatbots, réponses automatiques, contenu — pour que tu génères plus sans travailler plus.</p>
+  <div class="hero-ctas">
+    <a onclick="scrollTo('demos')" class="btn-primary">Voir les démos en live</a>
+    <a onclick="scrollTo('contact')" class="btn-ghost">Prendre contact</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="wrapper">
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Tes systèmes IA actifs, même quand tu dors</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">−80%</div>
+      <div class="stat-label">Temps passé à répondre aux messages clients</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">&lt;48h</div>
+      <div class="stat-label">Pour avoir ta première automatisation live</div>
+    </div>
+  </div>
+</div>
+
+<!-- DEMOS -->
+<div class="wrapper" id="demos">
+  <div class="section-label">// Démos interactives — réelles</div>
+  <h2 class="section-title">Teste nos systèmes maintenant</h2>
+  <p class="section-sub">Ces démos utilisent de la vraie IA. Ce que tu touches ici, c'est ce qu'on installe dans ton business.</p>
+
+  <div class="demo-grid">
+
+    <!-- DEMO 1 : CHATBOT -->
+    <div class="demo-card">
+      <div class="demo-head">
+        <div class="demo-icon">💬</div>
+        <div>
+          <div class="demo-title">Chatbot client IA</div>
+          <div class="demo-desc">Ici configuré pour "Maison Élégance" (e-commerce déco). Pose une vraie question client.</div>
+        </div>
+      </div>
+      <div class="demo-body">
+        <div class="chat-msgs" id="chatMsgs">
+          <div class="msg msg-bot">Bonjour ! Je suis l'assistant de <strong>Maison Élégance</strong> 🏡<br>Comment puis-je vous aider ?</div>
+        </div>
+        <div class="chat-row">
+          <input class="chat-in" id="chatIn" placeholder="Ex : Quels sont vos délais de livraison ?" onkeydown="if(event.key==='Enter')sendChat()">
+          <button class="chat-go" id="chatBtn" onclick="sendChat()">→</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO 2 : DM AUTO-REPLY -->
+    <div class="demo-card">
+      <div class="demo-head">
+        <div class="demo-icon">📱</div>
+        <div>
+          <div class="demo-title">Réponse auto DMs</div>
+          <div class="demo-desc">Sélectionne un DM reçu → l'IA génère la réponse parfaite en 3 secondes.</div>
+        </div>
+      </div>
+      <div class="demo-body">
+        <div class="dm-list">
+          <div class="dm-item" id="dm-0" onclick="pickDm(0)">
+            <div class="dm-av" style="background:#1a1230;color:#9c7cff">ML</div>
+            <div class="dm-info">
+              <div class="dm-name">Marie L.</div>
+              <div class="dm-msg">Vous proposez toujours le coaching business en ligne ?</div>
+            </div>
+            <div class="dm-dot"></div>
+          </div>
+          <div class="dm-item" id="dm-1" onclick="pickDm(1)">
+            <div class="dm-av" style="background:#0d2318;color:#3ef0b0">KD</div>
+            <div class="dm-info">
+              <div class="dm-name">Kevin D.</div>
+              <div class="dm-msg">C'est quoi les tarifs ? J'ai vu votre promo hier</div>
+            </div>
+            <div class="dm-dot"></div>
+          </div>
+          <div class="dm-item" id="dm-2" onclick="pickDm(2)">
+            <div class="dm-av" style="background:#2a0f0f;color:#f07070">SR</div>
+            <div class="dm-info">
+              <div class="dm-name">Sophie R.</div>
+              <div class="dm-msg">Problème avec ma commande #4521, pas encore livrée</div>
+            </div>
+            <div class="dm-dot"></div>
+          </div>
+        </div>
+        <div class="dm-reply" id="dmReply">← Clique sur un DM pour générer la réponse IA</div>
+        <button class="dm-gen" id="dmBtn" onclick="genDmReply()" disabled>Générer la réponse IA ✦</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTORS -->
+<div class="wrapper" id="secteurs">
+  <div class="section-label">// Secteurs</div>
+  <h2 class="section-title">On travaille avec qui ?</h2>
+  <p class="section-sub">Trois types de business où nos systèmes IA font une vraie différence dès la première semaine.</p>
+
+  <div class="sectors-grid">
+    <div class="sector-card">
+      <div class="sector-emoji">🛍️</div>
+      <div class="sector-name">E-commerce & Boutiques</div>
+      <div class="sector-text">Tu vends en ligne mais tu passes des heures à répondre aux mêmes questions ? On automatise ça — chatbot, DMs, relances.</div>
+      <div class="gains">
+        <div class="gain">Chatbot support 24h/24</div>
+        <div class="gain">Réponse DMs Instagram auto</div>
+        <div class="gain">Relance panier abandonné IA</div>
+      </div>
+    </div>
+    <div class="sector-card">
+      <div class="sector-emoji">💼</div>
+      <div class="sector-name">Consultants & Coachs</div>
+      <div class="sector-text">Tu vends ton expertise mais tu passes du temps à qualifier tes leads et répondre aux mêmes emails. On règle ça.</div>
+      <div class="gains">
+        <div class="gain">Qualification de leads auto</div>
+        <div class="gain">Réponse email intelligente</div>
+        <div class="gain">Onboarding client automatisé</div>
+      </div>
+    </div>
+    <div class="sector-card">
+      <div class="sector-emoji">🎬</div>
+      <div class="sector-name">Créateurs TikTok & Réseaux</div>
+      <div class="sector-text">Ta communauté grandit mais tu ne peux plus gérer tous les DMs. L'IA répond à ta place, dans ton ton.</div>
+      <div class="gains">
+        <div class="gain">Réponse DMs en masse auto</div>
+        <div class="gain">Génération de contenu IA</div>
+        <div class="gain">Funnels DM → vente</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-block" id="contact">
+  <div class="section-label">// Et toi ?</div>
+  <h2 class="section-title">Discutons de ton business</h2>
+  <p>Appel découverte gratuit. On regarde ensemble ce qu'on peut automatiser chez toi et ce que ça peut t'apporter concrètement.</p>
+  <a href="mailto:contact@autonova.fr" class="btn-primary" style="font-size:16px;padding:16px 44px">Réserver un appel gratuit →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">Auto<span>nova</span></div>
+  <div>© 2025 Autonova · Agence Automatisation IA</div>
+  <div>contact@autonova.fr</div>
+</footer>
+
+<script>
+// ─── CLAUDE API ───
+async function askClaude(messages, system) {
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      system,
+      messages
+    })
+  });
+  const d = await r.json();
+  return d.content[0].text;
+}
+
+// ─── CHATBOT ───
+const SHOP_SYS = `Tu es l'assistant virtuel de "Maison Élégance", une boutique e-commerce française de décoration d'intérieur haut de gamme (style scandinave & contemporain).
+
+Informations boutique :
+- Livraison : 3–5 jours ouvrés en France, gratuite dès 80€
+- Retours : gratuits dans les 30 jours
+- Produits : meubles, luminaires, textiles, objets déco
+- SAV : lun–ven 9h–18h par email ou chat
+- Promo en cours : −20% sur les luminaires jusqu'au 31 mars
+
+Sois chaleureux, professionnel et concis. Maximum 2–3 phrases. Réponds en français uniquement.`;
+
+let history = [];
+let chatBusy = false;
+
+async function sendChat() {
+  if (chatBusy) return;
+  const inp = document.getElementById('chatIn');
+  const txt = inp.value.trim();
+  if (!txt) return;
+
+  inp.value = '';
+  chatBusy = true;
+  document.getElementById('chatBtn').disabled = true;
+
+  addBubble(txt, 'user');
+  history.push({ role: 'user', content: txt });
+
+  const typing = addTyping();
+
+  try {
+    const reply = await askClaude(history, SHOP_SYS);
+    typing.remove();
+    addBubble(reply, 'bot');
+    history.push({ role: 'assistant', content: reply });
+  } catch {
+    typing.remove();
+    addBubble("Désolé, une erreur s'est produite. Réessayez !", 'bot');
+  }
+
+  chatBusy = false;
+  document.getElementById('chatBtn').disabled = false;
+}
+
+function addBubble(txt, who) {
+  const el = document.createElement('div');
+  el.className = `msg msg-${who === 'user' ? 'user' : 'bot'}`;
+  el.innerHTML = txt;
+  const c = document.getElementById('chatMsgs');
+  c.appendChild(el);
+  c.scrollTop = c.scrollHeight;
+}
+
+function addTyping() {
+  const el = document.createElement('div');
+  el.className = 'msg msg-typing';
+  el.innerHTML = '<div class="dot-row"><span></span><span></span><span></span></div>';
+  const c = document.getElementById('chatMsgs');
+  c.appendChild(el);
+  c.scrollTop = c.scrollHeight;
+  return el;
+}
+
+// ─── DM AUTO-REPLY ───
+const DMS = [
+  { id: 'dm-0', name: 'Marie L.', text: 'Vous proposez toujours le coaching business en ligne ?', ctx: 'coach business en ligne' },
+  { id: 'dm-1', name: 'Kevin D.', text: "C'est quoi les tarifs ? J'ai vu votre promo hier", ctx: 'coaching / consulting premium' },
+  { id: 'dm-2', name: 'Sophie R.', text: 'Problème avec ma commande #4521, pas encore livrée', ctx: 'e-commerce boutique déco' }
+];
+
+const DM_SYS = `Tu génères des réponses DM Instagram professionnelles et naturelles pour un business. Règles :
+- 2–4 phrases maximum
+- Ton chaleureux et humain, pas robotique
+- Toujours inviter à une action (appel, lien, réponse)
+- En français uniquement
+- Commence directement par la réponse, sans intro ni signature`;
+
+let dmSel = null;
+let dmBusy = false;
+
+function pickDm(i) {
+  DMS.forEach((_, j) => document.getElementById(`dm-${j}`).classList.toggle('active', j === i));
+  dmSel = i;
+  const r = document.getElementById('dmReply');
+  r.textContent = 'Clique sur "Générer la réponse IA" 👇';
+  r.classList.remove('ready');
+  document.getElementById('dmBtn').disabled = false;
+  document.getElementById('dmBtn').textContent = 'Générer la réponse IA ✦';
+}
+
+async function genDmReply() {
+  if (dmBusy || dmSel === null) return;
+  dmBusy = true;
+  const btn = document.getElementById('dmBtn');
+  btn.disabled = true;
+  btn.textContent = 'Génération en cours...';
+
+  const dm = DMS[dmSel];
+  const r = document.getElementById('dmReply');
+  r.textContent = '...';
+  r.classList.remove('ready');
+
+  try {
+    const reply = await askClaude(
+      [{ role: 'user', content: `DM de ${dm.name} : "${dm.text}"\nContexte du business : ${dm.ctx}` }],
+      DM_SYS
+    );
+    r.textContent = reply;
+    r.classList.add('ready');
+  } catch {
+    r.textContent = 'Erreur. Réessaye dans un instant.';
+  }
+
+  dmBusy = false;
+  btn.disabled = false;
+  btn.textContent = 'Régénérer ✦';
+}
+
+// ─── SMOOTH SCROLL ───
+function scrollTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
