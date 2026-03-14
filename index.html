@@ -740,69 +740,58 @@
 </footer>
 
 <script>
-// ─── CLAUDE API ───
-const ANTHROPIC_KEY = "sk-ant-api03-Lp9TWZWS1DUczHZqBoY28KXJyoFq5EwVpaFYHaqU3rbZMUNaxREQIe2z7kyDF7y8hENTvAs4YMf3qzt7ZyBplQ-АPp6kwAA";
+// ─── CHATBOT SIMULÉ ───
+const CHAT_RESPONSES = [
+  { keys: ['livraison','délai','délais','expédition','recevoir','arrive','arriver'],
+    reply: "Nos livraisons sont effectuées en <strong>3 à 5 jours ouvrés</strong> partout en France métropolitaine. La livraison est offerte dès 80€ d'achat 🚚" },
+  { keys: ['retour','retours','rembours','rembourse','échange','satisfait'],
+    reply: "Les retours sont <strong>100% gratuits</strong> dans les 30 jours suivant la réception. Il suffit de nous contacter par email et on s'occupe de tout 😊" },
+  { keys: ['promo','réduction','solde','promotion','remise','code','offre'],
+    reply: "Bonne nouvelle ! Nous avons en ce moment <strong>−20% sur tous nos luminaires</strong> jusqu'au 31 mars. Le code est automatiquement appliqué à la caisse ✨" },
+  { keys: ['luminaire','lampe','suspension','plafonnier','éclairage','ampoule'],
+    reply: "Notre collection luminaires est un vrai coup de cœur ! Suspensions scandinaves, lampes minimalistes, appliques design... Tout est disponible avec <strong>−20% en ce moment</strong> 💡" },
+  { keys: ['meuble','canapé','table','chaise','bureau','étagère','commode'],
+    reply: "Nos meubles sont fabriqués avec des matériaux nobles (chêne, bouleau, lin). Disponibles à la commande avec un délai de <strong>5 à 10 jours</strong> selon les pièces 🪑" },
+  { keys: ['paiement','payer','carte','virement','sécurisé'],
+    reply: "Nous acceptons toutes les cartes bancaires, PayPal et le virement. Le paiement est <strong>100% sécurisé</strong> via notre partenaire Stripe 🔒" },
+  { keys: ['sav','service','contact','email','téléphone','joindre','problème','aide'],
+    reply: "Notre équipe SAV est disponible <strong>du lundi au vendredi, 9h–18h</strong> par email ou via ce chat. On répond sous 2h en moyenne 📩" },
+  { keys: ['prix','coût','combien','cher','tarif'],
+    reply: "Nos produits sont positionnés haut de gamme, de 30€ pour les petits objets déco jusqu'à 800€ pour les pièces de mobilier. N'hésitez pas à consulter notre catalogue 🏷️" },
+];
 
-async function askClaude(messages, system) {
-  const r = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": ANTHROPIC_KEY,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
-    },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
-      system,
-      messages
-    })
-  });
-  const d = await r.json();
-  return d.content[0].text;
+const CHAT_FALLBACK = [
+  "Merci pour votre message ! Je transmets votre question à notre équipe qui vous répondra dans les <strong>2 heures</strong> ⏱️",
+  "Bonne question ! Pouvez-vous me préciser un peu plus votre demande ? Je suis là pour vous aider 😊",
+  "Je note votre demande ! Notre équipe est disponible par email ou au chat du <strong>lundi au vendredi 9h–18h</strong> 📩",
+];
+
+let fallbackIdx = 0;
+let chatBusy = false;
+
+function getBotReply(txt) {
+  const lower = txt.toLowerCase();
+  for (const r of CHAT_RESPONSES) {
+    if (r.keys.some(k => lower.includes(k))) return r.reply;
+  }
+  return CHAT_FALLBACK[fallbackIdx++ % CHAT_FALLBACK.length];
 }
 
-// ─── CHATBOT ───
-const SHOP_SYS = `Tu es l'assistant virtuel de "Maison Élégance", une boutique e-commerce française de décoration d'intérieur haut de gamme (style scandinave & contemporain).
-
-Informations boutique :
-- Livraison : 3–5 jours ouvrés en France, gratuite dès 80€
-- Retours : gratuits dans les 30 jours
-- Produits : meubles, luminaires, textiles, objets déco
-- SAV : lun–ven 9h–18h par email ou chat
-- Promo en cours : −20% sur les luminaires jusqu'au 31 mars
-
-Sois chaleureux, professionnel et concis. Maximum 2–3 phrases. Réponds en français uniquement.`;
-
-let history = [];
-let chatBusy = false;
+function delay(ms) { return new Promise(res => setTimeout(res, ms)); }
 
 async function sendChat() {
   if (chatBusy) return;
   const inp = document.getElementById('chatIn');
   const txt = inp.value.trim();
   if (!txt) return;
-
   inp.value = '';
   chatBusy = true;
   document.getElementById('chatBtn').disabled = true;
-
   addBubble(txt, 'user');
-  history.push({ role: 'user', content: txt });
-
   const typing = addTyping();
-
-  try {
-    const reply = await askClaude(history, SHOP_SYS);
-    typing.remove();
-    addBubble(reply, 'bot');
-    history.push({ role: 'assistant', content: reply });
-  } catch {
-    typing.remove();
-    addBubble("Désolé, une erreur s'est produite. Réessayez !", 'bot');
-  }
-
+  await delay(900 + Math.random() * 700);
+  typing.remove();
+  addBubble(getBotReply(txt), 'bot');
   chatBusy = false;
   document.getElementById('chatBtn').disabled = false;
 }
@@ -826,19 +815,15 @@ function addTyping() {
   return el;
 }
 
-// ─── DM AUTO-REPLY ───
+// ─── DM AUTO-REPLY SIMULÉ ───
 const DMS = [
-  { id: 'dm-0', name: 'Marie L.', text: 'Vous proposez toujours le coaching business en ligne ?', ctx: 'coach business en ligne' },
-  { id: 'dm-1', name: 'Kevin D.', text: "C'est quoi les tarifs ? J'ai vu votre promo hier", ctx: 'coaching / consulting premium' },
-  { id: 'dm-2', name: 'Sophie R.', text: 'Problème avec ma commande #4521, pas encore livrée', ctx: 'e-commerce boutique déco' }
+  { id: 'dm-0', name: 'Marie L.', text: 'Vous proposez toujours le coaching business en ligne ?',
+    reply: "Oui tout à fait Marie ! Le coaching business en ligne est toujours disponible 🙌 On a d'ailleurs quelques places qui viennent de se libérer pour ce mois-ci. Tu veux qu'on en discute sur un appel découverte gratuit de 20 min ?" },
+  { id: 'dm-1', name: 'Kevin D.', text: "C'est quoi les tarifs ? J'ai vu votre promo hier",
+    reply: "Salut Kevin ! La promo que tu as vue c'est notre offre de lancement — je t'envoie les détails en privé pour que tu aies toutes les infos. Dis-moi juste ton objectif principal en ce moment et je te guide vers la formule la plus adaptée 🎯" },
+  { id: 'dm-2', name: 'Sophie R.', text: 'Problème avec ma commande #4521, pas encore livrée',
+    reply: "Sophie je suis vraiment désolée pour ce délai ! Je vérifie ça immédiatement 🔍 Peux-tu me confirmer ton adresse de livraison en DM ? Je fais le point avec notre transporteur et je te tiens informée dans l'heure." },
 ];
-
-const DM_SYS = `Tu génères des réponses DM Instagram professionnelles et naturelles pour un business. Règles :
-- 2–4 phrases maximum
-- Ton chaleureux et humain, pas robotique
-- Toujours inviter à une action (appel, lien, réponse)
-- En français uniquement
-- Commence directement par la réponse, sans intro ni signature`;
 
 let dmSel = null;
 let dmBusy = false;
@@ -859,23 +844,12 @@ async function genDmReply() {
   const btn = document.getElementById('dmBtn');
   btn.disabled = true;
   btn.textContent = 'Génération en cours...';
-
-  const dm = DMS[dmSel];
   const r = document.getElementById('dmReply');
   r.textContent = '...';
   r.classList.remove('ready');
-
-  try {
-    const reply = await askClaude(
-      [{ role: 'user', content: `DM de ${dm.name} : "${dm.text}"\nContexte du business : ${dm.ctx}` }],
-      DM_SYS
-    );
-    r.textContent = reply;
-    r.classList.add('ready');
-  } catch {
-    r.textContent = 'Erreur. Réessaye dans un instant.';
-  }
-
+  await delay(1200 + Math.random() * 800);
+  r.textContent = DMS[dmSel].reply;
+  r.classList.add('ready');
   dmBusy = false;
   btn.disabled = false;
   btn.textContent = 'Régénérer ✦';
