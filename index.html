@@ -573,9 +573,9 @@
 <header>
   <a class="logo" href="#">Auto<span>nova</span></a>
   <nav>
-    <a onclick="scrollTo('demos')">Démos</a>
-    <a onclick="scrollTo('secteurs')">Secteurs</a>
-    <a onclick="scrollTo('contact')" class="nav-cta">Prendre contact</a>
+    <a onclick="goTo('demos')">Démos</a>
+    <a onclick="goTo('secteurs')">Secteurs</a>
+    <a onclick="goTo('contact')" class="nav-cta">Prendre contact</a>
   </nav>
 </header>
 
@@ -589,8 +589,8 @@
   <h1>Automatise ton business.<br><em>Multiplie tes résultats.</em></h1>
   <p class="hero-sub">On installe des systèmes IA dans ton business — chatbots, réponses automatiques, contenu — pour que tu génères plus sans travailler plus.</p>
   <div class="hero-ctas">
-    <a onclick="scrollTo('demos')" class="btn-primary">Voir les démos en live</a>
-    <a onclick="scrollTo('contact')" class="btn-ghost">Prendre contact</a>
+    <a onclick="goTo('demos')" class="btn-primary">Voir les démos en live</a>
+    <a onclick="goTo('contact')" class="btn-ghost">Prendre contact</a>
   </div>
 </div>
 
@@ -875,7 +875,7 @@ async function genDmReply() {
 }
 
 // ─── SMOOTH SCROLL ───
-function scrollTo(id) {
+function goTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 }
 </script>
